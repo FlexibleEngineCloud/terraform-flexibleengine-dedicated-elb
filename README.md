@@ -205,10 +205,10 @@ EOT
 
 | Name               | Description                                     | Type         | Default   | Required |
 | ------------------ | ----------------------------------------------- | ------------ | --------- | :------: |
-| loadbalancer_name  | Name of the Load Balancer (prefixed by elb-*)   | string       | n/a       |   yes    |
+| loadbalancer_name  | Name of the Load Balancer                           | string       | n/a       |   yes    |
 | description        | The description for the load balancer            | string       | ""        |    no    |
 | vpc_id             | VPC ID on which to create the load balancer      | string       | n/a       |   yes    |
-| subnet_id          | Subnet ID to attach the VIP                      | string       | n/a       |   yes    |
+| subnet_id          | Subnet ID                                        | string       | n/a       |   yes    |
 | cross_vpc_backend  | Associate backend server IPs with load balancer  | bool         | n/a       |   yes    |
 | loadbalancer_provider | The name of the provider (currently supports "vlb") | string  | ""        |    no    |
 | security_group_ids | A list of security group IDs to apply            | list(string) | []        |    no    |
