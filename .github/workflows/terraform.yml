@@ -1,29 +1,43 @@
-name: 'Terraform GitHub Actions'
+name: 'Terraform'
+
 on:
-  - push
-  - pull_request
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+permissions:
+  contents: read
+
 jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
+    environment: test
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
     steps:
-      - name: 'Checkout'
-        uses: actions/checkout@v2
-      - name: 'Terraform Format'
-        with:
-          tf_actions_subcommand: 'fmt'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: 'Terraform Init'
-        with:
-          tf_actions_subcommand: 'init'
-          args: '-input=false'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: 'Terraform Validate'
-        with:
-          tf_actions_subcommand: 'validate'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OS_AUTH_URL: whatever
-          OS_REGION_NAME: whatever
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      run: terraform init 
+
+    # Checks that all Terraform configuration files adhere to a canonical format
+    - name: Terraform Format
+      run: terraform fmt -check
+
+    # Checks that all Terraform configuration files pass validation tests
+    - name: Terraform Validate
+      run: terraform validate
