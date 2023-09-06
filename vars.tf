@@ -50,7 +50,7 @@ variable "tags" {
   description = "The key/value pairs to associate with the loadbalancer"
   type        = map(string)
   default = {
-    Environment = "landing-zone"
+    Environment = "dedicated-elb"
   }
 }
 
